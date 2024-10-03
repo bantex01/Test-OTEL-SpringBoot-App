@@ -1,5 +1,5 @@
 # java-otel-test
-Simple java app to run under the OTEL Java Agent to produce a metric, trace and log in OTLP format for testing purposes
+Simple java app to run under the OTEL Java Agent to produce a  custom metric, trace and log in OTLP format for testing purposes
 
 Example:
 
