@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" packages="io.opentelemetry.instrumentation:opentelemetry-log4j-appender-2.17:2.8.0-alpha">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout
+          pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    <OpenTelemetry name="OpenTelemetryAppender"/>
+  </Appenders>
+  <Loggers>
+    <Root>
+      <AppenderRef ref="OpenTelemetryAppender" level="All"/>
+      <AppenderRef ref="Console" level="All"/>
+    </Root>
+  </Loggers>
+</Configuration>
