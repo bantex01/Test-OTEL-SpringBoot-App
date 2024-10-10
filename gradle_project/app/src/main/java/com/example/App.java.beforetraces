@@ -1,0 +1,54 @@
+package com.example;
+
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.metrics.Meter;
+import io.opentelemetry.api.metrics.LongCounter;
+import io.opentelemetry.api.common.Attributes;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
+public class App {
+    // Create a Logger instance
+    private static final Logger logger = LogManager.getLogger(App.class);
+
+    public static void main(String[] args) {
+
+        // Obtain a Meter instance from OpenTelemetry
+        Meter meter = GlobalOpenTelemetry.get().getMeter("com.example.App");
+
+        // Create a counter to track the number of log messages sent
+        LongCounter logCounter = meter
+            .counterBuilder("java_test_log_messages")
+            .setDescription("Counts the number of log messages sent")
+            .setUnit("messages")
+            .build();
+
+        // Create attributes to tag the metric with log level
+        Attributes attributes = Attributes.builder()
+            .put("log_level", "info")
+            .build();
+
+        while (true) {
+            // Log a test message
+            logger.info("This is a test log message!");
+
+            // Increment the counter with attributes
+            logCounter.add(1, attributes);
+            //logCounter.add(1);
+
+            // Log the counter increment
+            logger.info("Incremented log_messages_sent counter!");
+
+            // Wait for 60 seconds (60000 milliseconds)
+            try {
+                Thread.sleep(60000); // 60 seconds
+            } catch (InterruptedException e) {
+                // Log the interruption error
+                logger.error("Thread was interrupted", e);
+                // Re-interrupt the thread in case we need to handle it elsewhere
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+}
