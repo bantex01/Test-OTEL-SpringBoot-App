@@ -1,0 +1,153 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.example</groupId>
+  <artifactId>otel-log-example-springboot</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>otel-log-example</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+      <java.version>17</java.version>
+      <spring.boot.version>3.0.0</spring.boot.version> <!-- Set to the desired Spring Boot version -->
+      <maven.compiler.source>${java.version}</maven.compiler.source>
+      <maven.compiler.target>${java.version}</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <!-- Spring Boot Starter Web -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>${spring.boot.version}</version> <!-- Added version -->
+                  <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+    </dependency>
+
+  <!--  <dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-log4j2</artifactId>
+  <scope>runtime</scope>
+  <version>${spring.boot.version}</version>
+</dependency>-->
+
+    <!-- OpenTelemetry dependencies -->
+
+  <!--<dependency>
+    <groupId>io.opentelemetry.instrumentation</groupId>
+    <artifactId>opentelemetry-log4j-context-data-2.17-autoconfigure</artifactId>
+    <version>2.9.0-alpha</version>
+    <scope>runtime</scope>
+  </dependency>-->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-otlp</artifactId>
+      <version>1.43.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk</artifactId>
+      <version>1.43.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-api</artifactId>
+      <version>1.43.0</version>
+    </dependency>
+
+    <!-- Log4j Core Dependency -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.20.0</version>
+    </dependency>
+
+    <!-- Log4j API Dependency -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.20.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-log4j-appender-2.17</artifactId>
+      <version>2.8.0-alpha</version>
+    </dependency>
+
+    <!-- Spring Boot Starter Test -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <version>${spring.boot.version}</version> <!-- Added version -->
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Maven Compiler Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>
+
+      <!-- Spring Boot Maven Plugin -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.version}</version> <!-- Added version -->
+      </plugin>
+
+      <!-- Maven Shade Plugin to bundle dependencies, but exclude the OpenTelemetry agent -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <!-- Exclude the OpenTelemetry agent from the application JAR -->
+              <artifactSet>
+                <excludes>
+                  <exclude>io.opentelemetry.javaagent:opentelemetry-javaagent</exclude>
+                </excludes>
+              </artifactSet>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.example.App</mainClass> <!-- Your main class -->
+                </transformer>
+              </transformers>
+              <filters>
+      <filter>
+        <artifact>*:*</artifact>
+        <excludes>
+          <exclude>**/Log4j2Plugins.dat</exclude>
+        </excludes>
+      </filter>
+    </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
