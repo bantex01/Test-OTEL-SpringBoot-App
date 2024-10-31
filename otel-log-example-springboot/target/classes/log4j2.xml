@@ -8,9 +8,14 @@
 
         <OpenTelemetry name="OpenTelemetryAppender" captureMapMessageAttributes="true" captureMarkerAttribute="true" captureContextDataAttributes="*">
             <!-- Only allow ERROR level logs to OpenTelemetryAppender -->
-            <!--<ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>-->
-            <!--<PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>-->
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} - %msg - %X{routing_key}%n"/>
+            <!--<ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <!-- Filter on regex of msg contents -->
+            <!--<RegexFilter regex=".*routing_key=lightstep.*" onMatch="ACCEPT" onMismatch="DENY"/>-->
+        <ThreadContextMapFilter>
+            <KeyValuePair key="routing_key" value="lightstep"/>
+        </ThreadContextMapFilter>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} - %msg - %X{routing_key}%n">
+            </PatternLayout>    
         </OpenTelemetry>
     </Appenders>
     
@@ -21,6 +26,3 @@
         </Root>
     </Loggers>
 </Configuration>
-
-
-

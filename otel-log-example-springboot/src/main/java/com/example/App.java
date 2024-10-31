@@ -86,6 +86,7 @@ public class App implements CommandLineRunner {
     public void startLogging() {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         // Schedule the logMessage method to run every 60 seconds
+        logger.info("Starting logging...");
         executorService.scheduleAtFixedRate(this::logMessage, 0, 60, TimeUnit.SECONDS);
 
         // Add a shutdown hook to gracefully shut down the executor service when the application exits
@@ -95,7 +96,8 @@ public class App implements CommandLineRunner {
     public void logMessage() {
         //Marker routingKeyMarker = MarkerManager.getMarker("routing_key=lightstep");
         ThreadContext.put("routing_key", "lightstep");
-        logger.info("Current ThreadContext map: {}", ThreadContext.getContext());
+        ThreadContext.put("project", "project1");
+        //logger.info("Current ThreadContext map: {}", ThreadContext.getContext());
 
         Attributes attributes = Attributes.builder()
                 .put("log_level", "info")
