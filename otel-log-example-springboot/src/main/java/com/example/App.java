@@ -26,6 +26,7 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import io.opentelemetry.semconv.ResourceAttributes;
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter;
+import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter;
 import io.opentelemetry.sdk.logs.SdkLoggerProvider;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.Marker;
@@ -58,8 +59,10 @@ public class App implements CommandLineRunner {
                                 .build())
                         .addLogRecordProcessor(
                             BatchLogRecordProcessor.builder(
-                                    OtlpGrpcLogRecordExporter.builder()
-                                        .setEndpoint("http://localhost:14317")
+                                    //OtlpGrpcLogRecordExporter.builder()
+                                    OtlpHttpLogRecordExporter.builder()
+                                        //.setEndpoint("http://localhost:14317")
+                                        .setEndpoint("http://localhost:14318/v1/logs")
                                         .build())
                                 .build())
                         .build())
