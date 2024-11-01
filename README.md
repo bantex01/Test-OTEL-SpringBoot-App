@@ -2,8 +2,6 @@
 
 This repo houses 2 very simple java apps to test the ability to emit custom metrics and traces from the Open Telemetry java agent. In addition, the otel-log-example-springboot app implements an open telemetry log appender to send logging telemetry to an open telemetry target.
 
-[TOC]
-
 ## otel-log-example-springboot-nocustomlogging
 
 This app is instrumented to to emit a custom metric and trace. Logging is carried out by running the Open Telemetry java agent by setting:
