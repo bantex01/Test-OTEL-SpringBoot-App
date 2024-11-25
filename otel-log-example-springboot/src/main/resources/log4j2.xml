@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="DEBUG" packages="io.opentelemetry.instrumentation.log4j.appender.v2_17">
+<Configuration status="DEBUG">
     <Appenders>
-        <OpenTelemetry name="OpenTelemetryAppender" captureMapMessageAttributes="true" captureMarkerAttribute="true" captureContextDataAttributes="*">
-            <!-- Only allow ERROR level logs to OpenTelemetryAppender -->
-            <!--<ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>-->
-            <!-- Filter on regex of msg contents -->
-            <!--<RegexFilter regex=".*routing_key=lightstep.*" onMatch="ACCEPT" onMismatch="DENY"/>-->
-        <ThreadContextMapFilter>
-            <KeyValuePair key="routing_key" value="lightstep"/>
-        </ThreadContextMapFilter>
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} - %msg - %X{routing_key}%n">
-            </PatternLayout>    
-        </OpenTelemetry>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - CONSOLE - %msg%n"/>-->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - CONSOLE - trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} - %msg - %X%n"/>
+        </Console>
     </Appenders>
     
     <Loggers>
         <Root level="INFO">
-            <AppenderRef ref="OpenTelemetryAppender"/>
+            <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
 </Configuration>
