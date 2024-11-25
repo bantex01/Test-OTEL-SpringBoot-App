@@ -61,7 +61,7 @@ public class App implements CommandLineRunner {
                             BatchLogRecordProcessor.builder(
                                     //OtlpGrpcLogRecordExporter.builder()
                                     OtlpHttpLogRecordExporter.builder()
-                                        //.setEndpoint("http://localhost:14317")
+                                        //.setEndpoint("http://localhost:14318/v1/logs")
                                         .setEndpoint("http://10.152.7.142:4318/v1/logs")
                                         .build())
                                 .build())
